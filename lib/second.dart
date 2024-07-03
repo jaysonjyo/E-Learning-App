@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_base/three.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -16,6 +18,9 @@ class Screen2 extends StatefulWidget {
 class _Screen2State extends State<Screen2> {
   bool ischecking = false;
   bool values = false;
+  TextEditingController email =TextEditingController();
+  TextEditingController password =TextEditingController();
+  FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +75,7 @@ class _Screen2State extends State<Screen2> {
                             borderRadius: BorderRadius.circular(20),
                             side: BorderSide(
                                 width: 0.10.w, color: Colors.black12))),
-                    child: TextField(
+                    child: TextField(controller: email,
                       decoration: InputDecoration(
                           prefixIcon: Icon(Icons.email_outlined),
                           border: OutlineInputBorder(
@@ -92,7 +97,7 @@ class _Screen2State extends State<Screen2> {
                             borderRadius: BorderRadius.circular(20),
                             side: BorderSide(
                                 width: 0.10.w, color: Colors.black12))),
-                    child: TextField(
+                    child: TextField(controller: password,
                       decoration: InputDecoration(
                           prefixIcon: Icon(Icons.lock_outlined),
                           suffixIcon: IconButton(
@@ -136,7 +141,13 @@ class _Screen2State extends State<Screen2> {
                   SizedBox(
                     height: 15.h,
                   ),
-                  TextButton(onPressed: (){Navigator.of(context).push(MaterialPageRoute(builder: (_)=>Screen3()));},
+                  TextButton(onPressed: ()async{
+                  await  auth.createUserWithEmailAndPassword(email: email.text, password: password.text).then((value){
+                    Fluttertoast.showToast(msg:'Successfully registerd');
+                    Navigator.of(context).push(MaterialPageRoute(builder: (_)=>Screen3()));
+                  }).onError((error, stackTrace){ Fluttertoast.showToast(msg:error.toString() );});
+
+                  },
                     child: Container(
                       width: 350.w,
                       height: 60.h,
@@ -222,7 +233,7 @@ class _Screen2State extends State<Screen2> {
                                 MaterialPageRoute(builder: (_) => Screen1()));
                           },
                           child: Text(
-                            'SIGN IN',
+                            'SIGN UP',
                             style: GoogleFonts.mulish(
                               textStyle: TextStyle(
                                 color: Color(0xFF0961F5),

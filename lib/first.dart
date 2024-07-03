@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_base/second.dart';
+import 'package:firebase_base/three.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -14,6 +17,9 @@ class Screen1 extends StatefulWidget {
 class _Screen1State extends State<Screen1> {
   bool ischecked = false;
   bool value = false;
+  TextEditingController email=TextEditingController() ;
+  TextEditingController password=TextEditingController();
+  FirebaseAuth auth =FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +73,7 @@ class _Screen1State extends State<Screen1> {
                             borderRadius: BorderRadius.circular(20),
                             side: BorderSide(
                                 width: 0.10.w, color: Colors.black12))),
-                    child: TextField(
+                    child: TextField(controller: email,
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.email_outlined),
                         border: OutlineInputBorder(borderSide: BorderSide.none),
@@ -87,7 +93,7 @@ class _Screen1State extends State<Screen1> {
                               borderRadius: BorderRadius.circular(20),
                               side: BorderSide(
                                   width: 0.10.w, color: Colors.black12))),
-                      child: TextField(
+                      child: TextField(controller: password,
                         decoration: InputDecoration(
                             prefixIcon: Icon(Icons.lock_outline),
                             suffixIcon: IconButton(
@@ -157,38 +163,47 @@ class _Screen1State extends State<Screen1> {
                   SizedBox(
                     height: 15.h,
                   ),
-                  Container(
-                    width: 350.w,
-                    height: 60.h,
-                    decoration: ShapeDecoration(
-                        color: Color(0xFF0961F5),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                            side: BorderSide(
-                                width: 0.10.w, color: Colors.black12))),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 110),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Sign Up",
-                            style: GoogleFonts.jost(
-                              textStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 25.sp,
-                                fontWeight: FontWeight.w700,
+                  TextButton(onPressed: ()async{
+                  await  auth.createUserWithEmailAndPassword(email: email.text, password: password.text).then((value){
+                    Fluttertoast.showToast(msg:'Successfully registerd');
+                    Navigator.of(context).push(MaterialPageRoute(builder: (_)=>Screen3()));
+                  }).onError((error, stackTrace){
+                    Fluttertoast.showToast(msg:error.toString() );
+                  });
+                  },
+                    child: Container(
+                      width: 350.w,
+                      height: 60.h,
+                      decoration: ShapeDecoration(
+                          color: Color(0xFF0961F5),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              side: BorderSide(
+                                  width: 0.10.w, color: Colors.black12))),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 110),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Sign Up",
+                              style: GoogleFonts.jost(
+                                textStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 25.sp,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 90),
-                            child: CircleAvatar(
-                              backgroundColor: Colors.white,
-                              radius: 20.r,
-                              child: Icon(Icons.arrow_forward),
-                            ),
-                          )
-                        ],
+                            Padding(
+                              padding: const EdgeInsets.only(left: 90),
+                              child: CircleAvatar(
+                                backgroundColor: Colors.white,
+                                radius: 20.r,
+                                child: Icon(Icons.arrow_forward),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
