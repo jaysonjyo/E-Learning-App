@@ -37,7 +37,7 @@ class _ScreenphoneotpState extends State<Screenphoneotp> {
               },
             ),
           ),
-          SizedBox(height: 250.h,),
+        //  SizedBox(height: 250.h,),
           TextButton(
             onPressed: () {  },
             child: Container(
