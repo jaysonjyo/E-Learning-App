@@ -44,6 +44,7 @@ dependencies:
   local_auth: ^2.2.0
   firebase_auth: ^5.1.1
   fluttertoast:
+  sms_autofill: ^2.4.0
 
 
 dev_dependencies:

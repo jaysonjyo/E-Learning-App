@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_base/phonepage.dart';
 import 'package:firebase_base/three.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -152,7 +153,7 @@ class _Screen2State extends State<Screen2> {
                       width: 350.w,
                       height: 60.h,
                       decoration: ShapeDecoration(
-                          color: Color(0xFF0961F5),
+                          color: Colors.black,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
                               side: BorderSide(
@@ -205,10 +206,15 @@ class _Screen2State extends State<Screen2> {
                             width: 70.w,
                             height: 70.h,
                             child: Image.asset("assets/a.png")),
-                        SizedBox(
-                            width: 70.w,
-                            height: 70.h,
-                            child: Image.asset("assets/b.png"))
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: GestureDetector(onTap: (){Navigator.of(context).push(MaterialPageRoute(builder: (_)=>Screenphone()));},
+                              child: CircleAvatar(radius: 23.r,child: Image.asset("assets/d.webp"),)),
+                        )
+                        // SizedBox(
+                        //     width: 70.w,
+                        //     height: 70.h,
+                        //     child: Image.asset("assets/c.png"))
                       ],
                     ),
                   ),

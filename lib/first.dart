@@ -175,7 +175,7 @@ class _Screen1State extends State<Screen1> {
                       width: 350.w,
                       height: 60.h,
                       decoration: ShapeDecoration(
-                          color: Color(0xFF0961F5),
+                          color: Colors.black,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
                               side: BorderSide(
