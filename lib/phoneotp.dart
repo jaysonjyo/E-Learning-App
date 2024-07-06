@@ -1,12 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_base/three.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 
 class Screenphoneotp extends StatefulWidget {
   final String verification;
+
   const Screenphoneotp({super.key, required this.verification});
 
   @override
@@ -14,50 +18,63 @@ class Screenphoneotp extends StatefulWidget {
 }
 
 class _ScreenphoneotpState extends State<Screenphoneotp> {
+FirebaseAuth auth =FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
-    String _code="";
     return Scaffold(
-      backgroundColor:Colors.white,
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
-        child: Column(children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 250),
-            child: PinFieldAutoFill(
-              decoration: UnderlineDecoration(
-                textStyle: const TextStyle(fontSize: 20, color: Colors.black),
-                colorBuilder: FixedColorBuilder(Colors.black.withOpacity(0.3)),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 250),
+              child: OtpTextField(
+                borderRadius: BorderRadius.circular(10.r),
+                borderWidth: 1,
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                numberOfFields: 6,
+                borderColor: Color(0xFF512DA8),
+                showFieldAsBox: true,
+                onCodeChanged: (String code) {},
+                onSubmit: (String verificationCode) async {
+                  final credentials = PhoneAuthProvider.credential(
+                      verificationId: widget.verification,
+                      smsCode: verificationCode);
+                  try{
+                    await auth.signInWithCredential(credentials);
+                    Navigator.of(context).push(MaterialPageRoute(builder: (_)=>Screen3()));
+                  }catch(error){
+                    Fluttertoast.showToast(msg: "error");
+                  }
+
+                }, // end onSubmit
               ),
-              currentCode: _code,
-              onCodeSubmitted: (code) {},
-              onCodeChanged: (code) {
-                if (code!.length == 6) {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                }
-              },
             ),
-          ),
-        //  SizedBox(height: 250.h,),
-          TextButton(
-            onPressed: () {  },
-            child: Container(
-              width: 200.w,
-              height: 60.h,
-              decoration: ShapeDecoration(
-                  color: Colors.black, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
-              ),child: Center(
-              child: Text(
-                'Continue',
-                style:GoogleFonts.jost(textStyle:  TextStyle(
-                  color: Colors.white,
-                  fontSize: 22.sp,
-                  fontFamily: 'Jost',
-                  fontWeight: FontWeight.w600,
-                ),),
-              ),
-            ),),
-          ),
-        ],),
+            //  SizedBox(height: 250.h,),
+            // Container(
+            //   width: 200.w,
+            //   height: 60.h,
+            //   decoration: ShapeDecoration(
+            //       color: Colors.black,
+            //       shape: RoundedRectangleBorder(
+            //           borderRadius: BorderRadius.circular(20))),
+            //   child: Center(
+            //     child: Text(
+            //       'Continue',
+            //       style: GoogleFonts.jost(
+            //         textStyle: TextStyle(
+            //           color: Colors.white,
+            //           fontSize: 22.sp,
+            //           fontFamily: 'Jost',
+            //           fontWeight: FontWeight.w600,
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+          ],
+        ),
       ),
     );
   }

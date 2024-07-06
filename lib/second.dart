@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import 'first.dart';
 
@@ -17,10 +18,11 @@ class Screen2 extends StatefulWidget {
 }
 
 class _Screen2State extends State<Screen2> {
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
   bool ischecking = false;
   bool values = false;
-  TextEditingController email =TextEditingController();
-  TextEditingController password =TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
   FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
@@ -76,7 +78,8 @@ class _Screen2State extends State<Screen2> {
                             borderRadius: BorderRadius.circular(20),
                             side: BorderSide(
                                 width: 0.10.w, color: Colors.black12))),
-                    child: TextField(controller: email,
+                    child: TextField(
+                      controller: email,
                       decoration: InputDecoration(
                           prefixIcon: Icon(Icons.email_outlined),
                           border: OutlineInputBorder(
@@ -84,7 +87,6 @@ class _Screen2State extends State<Screen2> {
                           ),
                           labelText: "Email"),
                     ),
-                  
                   ),
                   SizedBox(
                     height: 20.h,
@@ -98,7 +100,8 @@ class _Screen2State extends State<Screen2> {
                             borderRadius: BorderRadius.circular(20),
                             side: BorderSide(
                                 width: 0.10.w, color: Colors.black12))),
-                    child: TextField(controller: password,
+                    child: TextField(
+                      controller: password,
                       decoration: InputDecoration(
                           prefixIcon: Icon(Icons.lock_outlined),
                           suffixIcon: IconButton(
@@ -107,14 +110,14 @@ class _Screen2State extends State<Screen2> {
                                 : Icon(Icons.remove_red_eye_outlined),
                             onPressed: () {
                               setState(() {
-                                values=!values;
+                                values = !values;
                               });
                             },
                           ),
-                          border: OutlineInputBorder(borderSide: BorderSide.none),
+                          border:
+                              OutlineInputBorder(borderSide: BorderSide.none),
                           labelText: "Password"),
                     ),
-              
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 30, top: 10),
@@ -142,13 +145,19 @@ class _Screen2State extends State<Screen2> {
                   SizedBox(
                     height: 15.h,
                   ),
-                  TextButton(onPressed: ()async{
-                  await  auth.createUserWithEmailAndPassword(email: email.text, password: password.text).then((value){
-                    Fluttertoast.showToast(msg:'Successfully registerd');
-                    Navigator.of(context).push(MaterialPageRoute(builder: (_)=>Screen3()));
-                  }).onError((error, stackTrace){ Fluttertoast.showToast(msg:error.toString() );});
-
-                  },
+                  TextButton(
+                    onPressed: () async {
+                      await auth
+                          .createUserWithEmailAndPassword(
+                              email: email.text, password: password.text)
+                          .then((value) {
+                        Fluttertoast.showToast(msg: 'Successfully registerd');
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (_) => Screen3()));
+                      }).onError((error, stackTrace) {
+                        Fluttertoast.showToast(msg: error.toString());
+                      });
+                    },
                     child: Container(
                       width: 350.w,
                       height: 60.h,
@@ -199,17 +208,29 @@ class _Screen2State extends State<Screen2> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 130, top: 20),
+                    padding: const EdgeInsets.only(left: 110, top: 20),
                     child: Row(
                       children: [
-                        SizedBox(
-                            width: 70.w,
-                            height: 70.h,
-                            child: Image.asset("assets/a.png")),
+                        TextButton(
+                          onPressed: () {
+                            signInwithGoogle();
+                          },
+                          child: SizedBox(
+                              width: 70.w,
+                              height: 70.h,
+                              child: Image.asset("assets/a.png")),
+                        ),
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
-                          child: GestureDetector(onTap: (){Navigator.of(context).push(MaterialPageRoute(builder: (_)=>Screenphone()));},
-                              child: CircleAvatar(radius: 23.r,child: Image.asset("assets/d.webp"),)),
+                          child: GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (_) => Screenphone()));
+                              },
+                              child: CircleAvatar(
+                                radius: 23.r,
+                                child: Image.asset("assets/d.webp"),
+                              )),
                         )
                         // SizedBox(
                         //     width: 70.w,
@@ -261,5 +282,26 @@ class _Screen2State extends State<Screen2> {
         ),
       ),
     );
+  }
+
+  Future<String?> signInwithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleSignInAccount =
+          await _googleSignIn.signIn();
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount!.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+      await auth.signInWithCredential(credential).then((onValue){
+        Fluttertoast.showToast(msg: "Done");
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (_) => Screen3()));
+      }).onError((error, stackTrace){Fluttertoast.showToast(msg: error.toString());});
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+      throw e;
+    }
   }
 }

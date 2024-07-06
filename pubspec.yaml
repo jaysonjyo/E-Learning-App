@@ -45,6 +45,8 @@ dependencies:
   firebase_auth: ^5.1.1
   fluttertoast:
   sms_autofill: ^2.4.0
+  google_sign_in: ^6.2.1
+  cloud_firestore:
 
 
 dev_dependencies:

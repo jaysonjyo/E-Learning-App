@@ -52,7 +52,7 @@ class _ScreenphoneState extends State<Screenphone> {
                         color: Colors.black,
                       ),
                       borderRadius: BorderRadius.circular(30)),
-                      hintText: "Phone Number",
+                      hintText: "Phone Number",prefix: Text("+91"),
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30))
                   ),
@@ -61,7 +61,7 @@ class _ScreenphoneState extends State<Screenphone> {
               SizedBox(height: 190.h,),
               GestureDetector(onTap: () async {
               await  auth.verifyPhoneNumber(
-                  phoneNumber: number.text,
+                  phoneNumber: "+91${number.text}",
                     verificationCompleted: (Success){
 
                     },

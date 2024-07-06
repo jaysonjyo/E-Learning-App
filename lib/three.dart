@@ -1,7 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_base/four.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Screen3 extends StatefulWidget {
@@ -12,12 +14,9 @@ class Screen3 extends StatefulWidget {
 }
 
 class _Screen3State extends State<Screen3> {
-  String dropdownvalue = 'Male';
+  final firestore=FirebaseFirestore.instance.collection("Datas");
+  TextEditingController call= TextEditingController();
 
-  var items = [
-    'Male',
-    'Female',
-    'Other',];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,109 +34,38 @@ class _Screen3State extends State<Screen3> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Center(
-              child: Stack(
-                children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.white54,
-                    radius: 50,
-                    child: Icon(
-                      Icons.person_3_outlined,
-                      size: 40,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 50, left: 50),
-                    child: CircleAvatar(
-                        backgroundColor: Colors.black,
-                        radius: 15,
-                        child: Icon(
-                          Icons.add_ic_call_sharp,
-                          color: Colors.white,
-                          size: 20,
-                        )),
-                  )
-                ],
-              ),
-            ),
             SizedBox(
               height: 30.h,
             ),
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
-              child: TextField(
+              child: TextField(maxLines: 7,controller: call,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    labelText: "Name"),
+                   ),
               ),
             ),
             SizedBox(
                 height: 30.h,
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: TextField(
-                decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.calendar_month_outlined,
-                      color: Colors.black,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    labelText: "Nick Name"),
-              ),
-            ),
+
             SizedBox(
               height: 30.h,
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: TextField(
-                decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.email_outlined,
-                      color: Colors.black,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    labelText: "Email"),
-              ),
-            ),
-            SizedBox(
-              height: 30.h,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: TextField(
-                decoration: InputDecoration(
-                    suffixIcon:DropdownButton(underline: SizedBox(),
-                      value: dropdownvalue,
-                      items: items.map((String items) {
-                        return DropdownMenuItem(
-                          value: items,
-                          child: Text(items),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          dropdownvalue = newValue!;
-                          print(newValue);
-                        });
-                      },
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    labelText: "Gender"),
-              ),
-            ),
+
             SizedBox(  height: 30.h,),
             TextButton(
-        onPressed: () { Navigator.of(context).push(MaterialPageRoute(builder: (_)=>Screen4())); },
+        onPressed: () {
+          final idcard=DateTime.now().microsecondsSinceEpoch.toString();
+          firestore.doc(idcard).set({"title":call.text,"idcard":idcard}).then((onValue)=>{
+          Fluttertoast.showToast(msg: "DatasAdd")
+          }).onError((error, stackTrace)=>{
+              Fluttertoast.showToast(msg: "Error")}
+          );
+         // Navigator.of(context).push(MaterialPageRoute(builder: (_)=>Screen4()));
+          },
         child: Container(
         width: 350.w,
         height: 60.h,
@@ -148,7 +76,7 @@ class _Screen3State extends State<Screen3> {
         ),),
          child:    Center(
            child: Text(
-                'Continue',
+                'Submit',
                 style: GoogleFonts.jost(
                textStyle: TextStyle(
                   color: Colors.white,
@@ -159,6 +87,25 @@ class _Screen3State extends State<Screen3> {
               ),
          )
         ),
+            ),
+            TextButton(
+              onPressed: () {  Navigator.of(context).push(MaterialPageRoute(builder: (_)=>Screen4()));},
+              child: Container(
+                width: 200.w,
+                height: 60.h,
+                decoration: ShapeDecoration(
+                    color: Color(0xFF0961F5), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))
+                ),child: Center(
+                  child: Text(
+                  'SEE Result',
+                  style:GoogleFonts.jost(textStyle:  TextStyle(
+                    color: Colors.white,
+                    fontSize: 22.sp,
+                    fontFamily: 'Jost',
+                    fontWeight: FontWeight.w600,
+                  ),),
+                                ),
+                ),),
             ),
           ],
         ),
