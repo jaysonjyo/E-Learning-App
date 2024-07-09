@@ -59,7 +59,7 @@ class _Screen3State extends State<Screen3> {
             TextButton(
         onPressed: () {
           final idcard=DateTime.now().microsecondsSinceEpoch.toString();
-          firestore.doc(idcard).set({"title":call.text,"idcard":idcard}).then((onValue)=>{
+          firestore.doc(idcard).set({"title":call.text,"idcard":idcard}).then((onValue)=>{call.clear(),
           Fluttertoast.showToast(msg: "DatasAdd")
           }).onError((error, stackTrace)=>{
               Fluttertoast.showToast(msg: "Error")}
@@ -92,12 +92,12 @@ class _Screen3State extends State<Screen3> {
               onPressed: () {  Navigator.of(context).push(MaterialPageRoute(builder: (_)=>Screen4()));},
               child: Container(
                 width: 200.w,
-                height: 60.h,
+                height: 70.h,
                 decoration: ShapeDecoration(
-                    color: Color(0xFF0961F5), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))
+                    color: Color(0xFF0961F5), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
                 ),child: Center(
                   child: Text(
-                  'SEE Result',
+                  'See View',
                   style:GoogleFonts.jost(textStyle:  TextStyle(
                     color: Colors.white,
                     fontSize: 22.sp,

@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_base/ForgetPassword.dart';
 import 'package:firebase_base/phonepage.dart';
 import 'package:firebase_base/three.dart';
 import 'package:flutter/material.dart';
@@ -120,7 +121,18 @@ class _Screen2State extends State<Screen2> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 30, top: 10),
+                    padding: const EdgeInsets.only(left: 180,top: 10),
+                    child: GestureDetector(onTap: (){Navigator.of(context).push(MaterialPageRoute(builder: (_)=>ForgetPassword()));},
+                      child: Text(
+                        "ForgetPassword",
+                        style: GoogleFonts.lato(
+                            textStyle:
+                                TextStyle( fontSize: 20.sp,decoration: TextDecoration.underline,color: Colors.red)),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 30,),
                     child: Row(
                       children: [
                         Checkbox(
@@ -294,11 +306,13 @@ class _Screen2State extends State<Screen2> {
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
-      await auth.signInWithCredential(credential).then((onValue){
+      await auth.signInWithCredential(credential).then((onValue) {
         Fluttertoast.showToast(msg: "Done");
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (_) => Screen3()));
-      }).onError((error, stackTrace){Fluttertoast.showToast(msg: error.toString());});
+      }).onError((error, stackTrace) {
+        Fluttertoast.showToast(msg: error.toString());
+      });
     } on FirebaseAuthException catch (e) {
       print(e.message);
       throw e;
