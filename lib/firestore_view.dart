@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_base/Realtime1.dart';
+import 'package:firebase_base/upload_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -15,7 +16,7 @@ class Screen4 extends StatefulWidget {
 class _Screen4State extends State<Screen4> {
   TextEditingController editingController = TextEditingController();
   final firestore = FirebaseFirestore.instance.collection("Datas").snapshots();
-  final ref = FirebaseFirestore.instance.collection("Datas");
+  final ref= FirebaseFirestore.instance.collection("Datas");
 
   @override
   Widget build(BuildContext context) {
@@ -140,28 +141,56 @@ class _Screen4State extends State<Screen4> {
                       return SizedBox();
                     }
                   }),
-              GestureDetector(onTap: (){
-                Navigator.of(context).push(MaterialPageRoute(builder: (_)=>Screen5()));
-                },
-                child: Container(
-                  width: 200.w,
-                  height: 70.h,
-                  decoration: ShapeDecoration(
-                      color: Colors.black,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20))),
-                  child: Center(
-                    child: Text(
-                      "Next",
-                      style: GoogleFonts.lato(
-                          textStyle: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w800,
-                              fontSize: 28.sp)),
+              Padding(
+                padding: const EdgeInsets.only(left: 3),
+                child: Row(
+                  children: [
+                    GestureDetector(onTap: (){
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_)=>Screen5()));
+                      },
+                      child: Container(
+                        width: 200.w,
+                        height: 70.h,
+                        decoration: ShapeDecoration(
+                            color: Colors.black,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20))),
+                        child: Center(
+                          child: Text(
+                            "Next",
+                            style: GoogleFonts.lato(
+                                textStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 28.sp)),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                    SizedBox(width: 20.w,),
+                    GestureDetector(onTap: (){Navigator.of(context).push(MaterialPageRoute(builder: (_)=>UploadImage()));},
+                      child: Container(
+                        width: 200.w,
+                        height: 70.h,
+                        decoration: ShapeDecoration(
+                          color: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),),),
+                        child: Center(
+                          child: Text(
+                            "Upload Image",
+                            style: GoogleFonts.lato(
+                                textStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 25.sp)),
+                          ),
+                        ),),
+                    ),
+                  ],
                 ),
-              )
+              ),
+
             ],
           ),
         ),

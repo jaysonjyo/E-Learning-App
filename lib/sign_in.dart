@@ -9,7 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import 'first.dart';
+import 'Signup.dart';
 
 class Screen2 extends StatefulWidget {
   const Screen2({super.key});

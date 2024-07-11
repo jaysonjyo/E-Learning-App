@@ -1,4 +1,4 @@
-import 'package:firebase_base/first.dart';
+import 'package:firebase_base/Signup.dart';
 import 'package:flutter/material.dart';
 
 class Screen extends StatefulWidget {

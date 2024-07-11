@@ -131,7 +131,8 @@ class _Screen6State extends State<Screen6> {
               }
             ),
           ),
-          )
+          ),
+
         ],
       ),
     ),)
