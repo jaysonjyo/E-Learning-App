@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_base/view_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -116,7 +117,7 @@ final databaseReference  =FirebaseDatabase.instance.ref("post");
                             GestureDetector(
                               onTap: () {
                                 getImageCamera();
-
+                                Navigator.of(context).pop();
                               },
                               child: Container(
                                 width: 100.w,
@@ -219,6 +220,27 @@ final databaseReference  =FirebaseDatabase.instance.ref("post");
                 ),
               ),
             ),
+          ),
+          SizedBox(height: 50.h,),
+          GestureDetector(onTap: (){
+            Navigator.of(context).push(MaterialPageRoute(builder: (_)=>Imageview()));
+          },
+            child: Container(
+              width: 200.w,
+              height: 70.h,
+              decoration: ShapeDecoration(
+                  color:Colors.black, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
+              ),child: Center(
+              child: Text(
+                'See View',
+                style:GoogleFonts.jost(textStyle:  TextStyle(
+                  color: Colors.white,
+                  fontSize: 22.sp,
+                  fontFamily: 'Jost',
+                  fontWeight: FontWeight.w600,
+                ),),
+              ),
+            ),),
           ),
         ],
       ),

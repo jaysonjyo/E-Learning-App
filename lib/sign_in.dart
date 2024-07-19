@@ -160,7 +160,7 @@ class _Screen2State extends State<Screen2> {
                   TextButton(
                     onPressed: () async {
                       await auth
-                          .createUserWithEmailAndPassword(
+                          .signInWithEmailAndPassword(
                               email: email.text, password: password.text)
                           .then((value) {
                         Fluttertoast.showToast(msg: 'Successfully registerd');
